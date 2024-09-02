@@ -1,4 +1,5 @@
 const express = require('express');
+const routerApi = require('./routes');
 
 const app = express();
 const port = 3000;
@@ -11,27 +12,19 @@ app.get('/nueva-ruta', (req, res) => {
   res.send('Hola soy una nueva ruta');
 });
 
-app.get('/products', (req, res) => {
-  res.json([
-    {
-      name: 'Product 1',
-      price: 1000,
-    },
-    {
-      name: 'Product 2',
-      price: 2000,
-    },
-  ]);
-});
+routerApi(app);
 
-app.get('/products/:id', (req, res) => {
-  const { id } = req.params;
-  console.log(id);
-  res.json({
-    id,
-    name: 'Product 2',
-    price: 2000,
-  });
+
+app.get('/users', (req, res) => {
+  const { limit, offset } = req.query;
+  if (limit && offset) {
+    res.json({
+      limit,
+      offset,
+    });
+  } else {
+    res.send('No hay parámetros');
+  }
 });
 
 app.get('/categories/:categoryId/products/:productId', (req, res) => {
